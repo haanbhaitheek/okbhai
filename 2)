@@ -1,0 +1,193 @@
+2A)Consider the Employee database given below. The primary keys are underlined. Assume
+relevant data types for attributes.
+EMPLOYEE (Fname, Lname, SSN, Addrs, Sex, Salary, SuperSSN, Dno)
+DEPARTMENT (Dname, Dnumber, MgrSSN, MgrStartDate)
+PROJECT(Pno, Pname, Dnum)
+WORKS_ON (ESSN, Pno, Hours)
+Create the above tables in SQL. Specify primary and foreign keys properly. Enter at least 5 tuples in
+each table with relevant data. Solve the following queries.
+ i. Retrieve the name of all employees whose salary is greater than the salary of all employees in
+dept 5.
+ ii. Retrieve the ssn of all employees who work on project numbers 1,2 or 3
+ iii. Display the total Number of hours put in by all employees on every project.
+
+ 
+CREATE TABLE EMPLOYEE (
+Fname VARCHAR(10) NOT NULL,
+Lname VARCHAR(15) NOT NULL,
+Ssn VARCHAR(9) PRIMARY KEY,
+Bdate DATE,
+Address VARCHAR(40),
+Sex CHAR,
+Salary INT,
+Super_ssn VARCHAR(9),
+Dno INT
+);
+CREATE TABLE DEPARTMENT(
+Dname VARCHAR(15) NOT NULL,
+Dnumber INT PRIMARY KEY,
+Mgr_ssn VARCHAR(9) NOT NULL,
+Mgr_start_date DATE,
+FOREIGN KEY (Mgr_ssn) REFERENCES EMPLOYEE(Ssn),
+);
+CREATE TABLE PROJECT
+(
+Pnumber INT PRIMARY KEY,
+Pname VARCHAR(20) NOT NULL,
+Dnum INT,
+FOREIGN KEY (Dnum) REFERENCES DEPARTMENT(Dnumber),
+);
+CREATE TABLE WORKS_ON
+(
+Essn VARCHAR(9),
+Pno INT,
+Hours INT,
+PRIMARY KEY(Essn, Pno),
+FOREIGN KEY (Pno) REFERENCES PROJECT(Pnumber),
+FOREIGN KEY (Essn) REFERENCES EMPLOYEE(Ssn)
+);
+INSERT INTO EMPLOYEE Values('John','Smith', 123456789, '09-JAN-65', '731 Fondren,
+Houston, TX', 'M', 30000, NULL, NULL);
+INSERT INTO EMPLOYEE Values('Franklin','Wong', 333445555, '08-DEC-55', '638 Voss,
+Houston, TX', 'M', 40000, NULL, NULL);
+INSERT INTO EMPLOYEE Values('Alicia','Zelaya', 999887777, '19-JAN-68', '3321 Castle,
+Spring, TX', 'F', 25000, NULL, NULL);
+INSERT INTO EMPLOYEE Values('Jennifer','Wallace', 987654321, '01-JAN-65', '731 Fondren,
+Houston, TX', 'F', 43000, NULL, NULL);
+INSERT INTO EMPLOYEE Values('Ramesh','Narayan', 666884444, '01-JAN-65', '731 Fondren,
+Houston, TX', 'M', 38000, NULL, NULL);
+INSERT INTO EMPLOYEE Values('Joyce','English', 453453453, '01-JAN-65', '731 Fondren,
+Houston, TX', 'F', 25000, NULL, NULL);
+INSERT INTO EMPLOYEE Values('Ahmad','Jabbar', 987987987, '01-JAN-65', '731 Fondren,
+Houston, TX', 'M', 25000, NULL, NULL);
+INSERT INTO EMPLOYEE Values('James','Borg', 888665555, '01-JAN-65', '731 Fondren,
+Houston, TX', 'M', 55000, NULL, NULL);
+INSERT INTO DEPARTMENT Values('Research',5,'333445555','22-MAY-1988');
+INSERT INTO DEPARTMENT Values('Administration',4,'987654321','01-JAN-1995');
+INSERT INTO DEPARTMENT Values('Headquarters',1,'888665555','19-JUN-1981');
+INSERT INTO DEPARTMENT Values('Development',2,'666884444','22-MAY-1988');
+INSERT INTO DEPARTMENT Values('Management',3,'999887777','01-JAN-1995');
+INSERT INTO PROJECT Values(1,‘ProductX’,5);
+INSERT INTO PROJECT Values(2,'ProductY',5);
+INSERT INTO PROJECT Values(3,'ProductZ',2);
+INSERT INTO PROJECT Values(10,'Computerization',1);
+INSERT INTO PROJECT Values(20,'Reorganization',3);
+INSERT INTO PROJECT Values(30,'Newbenefits',4);
+INSERT INTO WORKS_ON Values('123456789',1,32);
+INSERT INTO WORKS_ON Values('123456789',2,7);
+INSERT INTO WORKS_ON Values('666884444',3,40);
+INSERT INTO WORKS_ON Values('453453453',1,20);
+INSERT INTO WORKS_ON Values('453453453',2,20);
+INSERT INTO WORKS_ON Values('333445555',2,10);
+INSERT INTO WORKS_ON Values('333445555',3,10);
+INSERT INTO WORKS_ON Values('333445555',10,10);
+INSERT INTO WORKS_ON Values('333445555',20,10);
+INSERT INTO WORKS_ON Values('999887777',30,30);
+INSERT INTO WORKS_ON Values('999887777',10,10);
+INSERT INTO WORKS_ON Values('987987987',10,35);
+INSERT INTO WORKS_ON Values('987987987',30,5);
+INSERT INTO WORKS_ON Values('987654321',30,20);
+INSERT INTO WORKS_ON Values('987654321',20,15);
+INSERT INTO WORKS_ON Values('888665555',20,NULL);
+//Retrieve the name of all employees whose salary is greater than the salary of all employees in dept
+5.
+SELECT Fname,Lname
+FROM EMPLOYEE
+WHERE Salary >all (SELECT Salary FROM EMPLOYEE WHERE Dno=5);
+//Retrieve the social security numbers of all employees who work on project numbers 1,2, or 3.
+SELECT DISTINCT Essn
+FROM WORKS_ON
+WHERE PNO IN (1, 2, 3);
+//Display the total Number of hours put in by all employees on every project.
+SELECT Pno,SUM(Hours)
+FROM WORKS_ON
+GROUP BY Pno;
+Consider the following restaurant table with the following attributes -
+Name, address –(building, street, area, pincode), id, cuisine, nearby landmarks, online delivery-
+(yes/no), famousfor(name of the dish)
+
+
+
+
+
+2B)//Create 10 collections with data relevant to the following questions. Write and execute
+MongoDB queries:
+ i. List the name, address and nearby landmarks of all restaurants in Bangalore where north Indian
+thali is available
+ ii. List the name and address of restaurants and also the dish the restaurant is famous for, in
+Bangalore.
+use restaurant
+switched to db restaurant
+db.createCollection(“rest")
+{ "ok" : 1 }
+db.rest.insert({name:"McD",building:12, street:"KR", area:"JN" pin:072,ID:1, cuisine:"fast
+food",landmark:"post office",od:"yes",famousfor:"cheese burger"})
+WriteResult({ "nInserted" : 1 })
+db.rest.insert({name:"Tailo",building:14, street:"MG", area:"Bangalore" pin:45,ID:2,
+cuisine:"Italian",landmark:"bank",od:"yes",famousfor:"pasta"})
+WriteResult({ "nInserted" : 1 })
+db.rest.insert({name:"Kesar",building:15, street:”SS”,area:"Bangalore",pin:55,ID:3, cuisine:"north
+indian",landmark:"milk factory",od:"no",famousfor:"north indian thali”})
+WriteResult({ "nInserted" : 1 })
+//List the name, address and nearby landmarks of all restaurants in Bangalore where north
+Indianthali is available.
+db.rest.find({famousfor:"north indian thali",area:"Bangalore"},
+{name:1,building:1,street:1,area:1,pin:1,landmark:1,_id:0})
+{ "name" : "Kesar", "building" : 15 , "street" : "SS" , "area" : "Bangalore" , "pin" : 55 , "landmark" :
+"milk factory" }
+//List the name and address of restaurants and also the dish the restaurant is famous for, in
+Bangalore.
+db.rest.find({area:"Bangalore"},{name:1, building:1, street:1, area:1, pin:1, famousfor:1})
+3A)//Consider the Aircraft database given below. The primary keys are underlined. Assume relevant
+data types for attributes.
+AIRCRAFT (Aircraft ID, Aircraft_name, Cruising_range)
+CERTIFIED (Emp ID, Aircraft ID)
+EMPLOYEE (Emp ID, Ename, Salary)
+Create the above tables in SQL. Specify primary and foreign keys properly. Enter at least 5 tuples in
+each table with relevant data. Solve the following queries.
+ i. Find the employee ID’s of employee who make the highest salary.
+ ii. Find the name of aircrafts such that all pilots certified to operate them earn more than 50000
+ iii. Find the employees who are certified for the maximum number of aircrafts.
+Create table aircraft(
+aid varchar(9) primary key,
+aname varchar(10),
+crange int
+);
+Create table employees(
+eid varchar(9) primary key,
+ename varchar(10),
+salary int
+);
+Create table certified(
+eid varchar(9)references employees(eid),
+aid varchar(9)references aircraft(aid)
+);
+insert into aircraft values('B001','Boeing',4000);
+insert into aircraft values('B002','Boeing',2500);
+insert into aircraft values('BB003','Blackbeard',6000);
+insert into aircraft values('S004','Supermarine',8000);
+insert into aircraft values('L005','Lockheed',2100);
+insert into employees values(1,'Johnny',40000);
+insert into employees values(2,'Timmy',60000);
+insert into employees values(3,'Lawrence',70000);
+insert into employees values(4,'Zuzu',90000);
+insert into employees values(5,'Matt',80000);
+insert into certified values(1,'B001');
+insert into certified values(1,'B002');
+insert into certified values(3,'S004');
+insert into certified values(4,'S004');
+insert into certified values(5,'L005');
+insert into certified values(2,'B002');
+insert into certified values(4,'BB003');
+insert into certified values(3,'BB003');
+insert into certified values(4,'L005');
+//Find Emp ID of employee who makes highest salary
+SELECT eid
+FROM employees
+WHERE salary=(SELECT MAX(salary) FROM employees);
+//Find the name of aircrafts such that all pilots certified to operate them earn more than 50000
+SELECT distinct aname
+FROM aircraft a,certified c,employees e
+WHERE a.aid=c.aid and c.eid=e.eid and e.salary>50000;
+//Find the employees who are certified for the maximum number of aircrafts.
+select ename,max(a.aid) from employees e,certified c,aircraft a where e.eid=c.eid and a.aid=c.aid 
